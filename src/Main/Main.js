@@ -1,12 +1,13 @@
 import React from 'react';
 import  './Main.sass'
 import Prod from './product/Prod'
+// import Header from "../Header/Header";
 
 
-function Main () {
 
 
-
+function Main (props) {
+    console.log('main:', props.course)
     return(
         <>
             <div className="Main">
@@ -22,7 +23,6 @@ function Main () {
                        <Prod/>
                    </tbody>
                 </table>
-
             </div>
         </>
         )

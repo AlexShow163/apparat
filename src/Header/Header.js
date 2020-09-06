@@ -3,72 +3,69 @@ import './Header.sass';
 import axios from 'axios'
 
 
-function Header () {
+function Header (props) {
     const [basketCount, setBasketCount] = useState(0) // Конвертированная сумма
     const [manyCurrency, setManyCurrency] = useState('') //Валюта
-    const [inputSum, setInputSum] = useState('') //Сумма
+    const [inputSum, setInputSum] = useState(0) //Сумма
     const [course, setCourse] = useState(0) //Курс на сейчас
-    const [isCalc, setIsCalc] = useState(false)
+
+
 
 
      const dataCurrency = (event)  => {
          setManyCurrency(event.target.value)
     }
+
     const dataSum = (event) => {
-        setInputSum(parseInt(event.target.value))
+        setInputSum(event.target.value);
     }
-
-
-
+    const arrValute = [];
     const priceValute = () => {
         axios.get('https://www.cbr-xml-daily.ru/daily_json.js')
             .then((response) => {
-                Object.values(response.data.Valute).map((el) => {
-                    // console.log(el);
-                    if(el.CharCode === manyCurrency) {
-                        let many = el.Value.toFixed(2)
-                        setCourse(parseInt(many))
+                Object.values(response.data.Valute).filter((el) => {
+                    if(el.CharCode === 'USD'  ) {
+                        arrValute.push(el)
+                        props.modalProps(el.Value)
+                        // let many = el.Value.toFixed(2)
+                        // setCourse(parseInt(many))
+                        // props.modalProps(many) //Передаем в App
+                    }
+                    else if(el.CharCode === 'EUR') {
+                        arrValute.push(el)
                     }
                 })
             })
     }
+    priceValute()
 
 
     const addData= (event) =>{
-        setIsCalc(true)
-        priceValute()
+        sumValute()
         event.preventDefault()
     }
 
     const remoteData = (event) => {
-        setBasketCount(0)
+       setBasketCount(0)
         event.preventDefault()
     }
 
-    useEffect(() => {
-           if(!isCalc) {
-               return
-           }
-               priceValute()
-               setBasketCount(() =>{ // пофиксить прибавление суммы
-                   return (inputSum * course)
-               })
-               console.log('work')
-               console.log(basketCount)
-                if(basketCount) {
-                    setIsCalc(false)
-                }
+    const sumValute = ( )  => {
+        arrValute.map((el) => {
+            if(el.CharCode === manyCurrency) {
+                setCourse(el.Value)
+                console.log(course)
+            }
+        })
+    }
+
+   useEffect(() => {
+       let result = parseInt(inputSum)
+       result = result * course
+       setBasketCount(result)
 
 
-
-    } )
- console.log(isCalc)
-
-
-
-
-
-
+   }, [course,inputSum])
 
 
 
@@ -86,15 +83,16 @@ function Header () {
                        <span className="basket-count">{basketCount}</span>
                    </div>
                    <div className="Header-control__many">
-                       <form>
-                           <select onChange={dataCurrency}    className="many__currency">
+                       <form >
+                           <select onChange={dataCurrency}  value={manyCurrency}  className="many__currency">
                                <option className="currency-img"> $ </option>
                                <option value="USD">USD</option>
                                <option value="EUR">EUR</option>
                            </select>
-                           <input onInput={dataSum} type="number"   placeholder="Сумма"/>
+                           <input onChange={dataSum} type="number" value={inputSum}  placeholder="Сумма"/>
                            <button onClick={addData} type='submit' className="many__add">Добавить</button>
-                           <button  onClick={remoteData}className="many__dropping">Сбросить</button>
+                           <button  onClick={remoteData} className="many__dropping">Сбросить</button>
+
                        </form>
                    </div>
                </div>
@@ -102,7 +100,6 @@ function Header () {
            <hr/>
 
        </>
-
     )
 }
 
