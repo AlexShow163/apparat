@@ -7,7 +7,11 @@ import Prod from './product/Prod'
 
 
 function Main (props) {
-    console.log('main:', props.course)
+    console.log('mainBasket:', props.manyBasket)
+
+
+
+
     return(
         <>
             <div className="Main">
@@ -20,7 +24,9 @@ function Main (props) {
                            <td className="Main-price">Цена</td>
                            <td className="Main-quantity">Количество</td>
                        </tr>
-                       <Prod/>
+                       <Prod setModalOpened={props.setModalOpened}
+                             manyBasket={props.manyBasket}
+                       />
                    </tbody>
                 </table>
             </div>

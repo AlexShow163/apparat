@@ -5,7 +5,7 @@ import axios from 'axios'
 
 function Header (props) {
     const [basketCount, setBasketCount] = useState(0) // Конвертированная сумма
-    const [manyCurrency, setManyCurrency] = useState('') //Валюта
+    const [manyCurrency, setManyCurrency] = useState(null) //Валюта
     const [inputSum, setInputSum] = useState(0) //Сумма
     const [course, setCourse] = useState(0) //Курс на сейчас
 
@@ -14,6 +14,7 @@ function Header (props) {
 
      const dataCurrency = (event)  => {
          setManyCurrency(event.target.value)
+
     }
 
     const dataSum = (event) => {
@@ -39,8 +40,16 @@ function Header (props) {
     }
     priceValute()
 
+    const manyWat = () => {
+        if (manyCurrency === null || manyCurrency === '$') {
+            props.setModalWarning(true)
+
+        }
+    }
+
 
     const addData= (event) =>{
+        manyWat()
         sumValute()
         event.preventDefault()
     }
@@ -54,7 +63,7 @@ function Header (props) {
         arrValute.map((el) => {
             if(el.CharCode === manyCurrency) {
                 setCourse(el.Value)
-                console.log(course)
+
             }
         })
     }
@@ -63,6 +72,7 @@ function Header (props) {
        let result = parseInt(inputSum)
        result = result * course
        setBasketCount(result)
+       props.setManyBasket(result)
 
 
    }, [course,inputSum])
@@ -84,8 +94,8 @@ function Header (props) {
                    </div>
                    <div className="Header-control__many">
                        <form >
-                           <select onChange={dataCurrency}  value={manyCurrency}  className="many__currency">
-                               <option className="currency-img"> $ </option>
+                           <select onChange={dataCurrency}    className="many__currency">
+                               <option> $ </option>
                                <option value="USD">USD</option>
                                <option value="EUR">EUR</option>
                            </select>

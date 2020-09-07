@@ -1,12 +1,19 @@
 import React from "react";
+import "./Modal.sass";
 
-function ModalWarning()  {
+function ModalWarning(props)  {
+    const modalWarningClose = () => {
+        props.setModalWarning(false)
+    }
+
     return(
-        <div className='wrap-bg'>
-            <div>
-                <div>крестик в кружечке</div>
-                <h2>Warning</h2>
-                <button></button>
+        <div className='modal'>
+            <div className="modal-window">
+                <div>
+                    <div className='image'/>
+                </div>
+                <h2>{props.value}</h2>
+                <button onClick={modalWarningClose}>Ok</button>
             </div>
         </div>
     )

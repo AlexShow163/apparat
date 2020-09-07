@@ -1,0 +1,65 @@
+.modal
+  background: rgba(0,0,0,.6)
+  z-index: 7
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  position: fixed
+  display: flex
+  justify-content: center
+  align-items: center
+
+  &-window
+
+    z-index: 10
+    border-radius: 5px
+    width: 450px
+    height: 300px
+    background: #ffffff
+    text-align: center
+    & div
+      display: flex
+      justify-content: center
+      margin-top: 15px
+    & h2
+      font-size: 45px
+      text-align: center
+    & button
+      vertical-align: middle
+      padding: 10px 15px
+      text-transform: uppercase
+      font-size: 35px
+      text-align: center
+      background: blue
+.image
+
+  border: #dd0000 3px solid
+  border-radius: 50%
+  width: 70px
+  height: 70px
+  position: relative
+  transform: rotate(45deg)
+.image:before, .image:after
+  content: ""
+  position: absolute
+  z-index: -1
+  background: #d00
+
+
+.image:before
+  left: 60%
+  width: 5%
+  margin-left: -15%
+  height: 100%
+
+
+.image:after
+  top: 60%
+  height: 5%
+  margin-top: -15%
+  width: 100%
+
+
+
+
