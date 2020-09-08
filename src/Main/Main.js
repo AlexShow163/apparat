@@ -1,16 +1,12 @@
-import React from 'react';
+import React  from 'react';
 import  './Main.sass'
 import Prod from './product/Prod'
-// import Header from "../Header/Header";
+
 
 
 
 
 function Main (props) {
-    console.log('mainBasket:', props.manyBasket)
-
-
-
 
     return(
         <>
@@ -24,8 +20,12 @@ function Main (props) {
                            <td className="Main-price">Цена</td>
                            <td className="Main-quantity">Количество</td>
                        </tr>
+
                        <Prod setModalOpened={props.setModalOpened}
                              manyBasket={props.manyBasket}
+                             setModalMany={props.setModalMany}
+                             setDataModal={props.setDataModal}
+
                        />
                    </tbody>
                 </table>
