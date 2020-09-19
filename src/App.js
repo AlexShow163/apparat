@@ -1,75 +1,52 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.sass';
-import Header from './Header/Header'
+import Header from './Components/Header/Header'
 import Main from './Main/Main'
 import ModalWarning from "./Modal/Modal warning";
 import Modal from "./Modal/Modal";
 import ModalFinish from "./Modal/Modal-finish";
+import AxiosComponent from "./Components/AxiosComponent";
+import { useSelector} from 'react-redux'
+
+
+
 
 
 
 function App() {
-    const [courseUSD, setCourseUSD] = useState(0) //Курс на сейчас
-    const [manyBasket, setManyBasket] =useState(0) // Сумма в кошельке
-    const [modalOpened, setModalOpened] = useState(false) //Открытие можального окна с выбором
-    const [dataModal,setDataModal] =useState({}) //Данные о продукте
-    const [modalWarning, setModalWarning] = useState(false) // Ворнинг при отсутствии валюты
-    const [modalMany, setModalMany] = useState(false) // Ворнинг при отсутствии денег
-    const [modalFinish,setModalFinish] = useState(false) // Модальное окно при получении товара
+    const modalWarningCurrency = useSelector(state => state.ModalReducers.modalWarningCurrency)
+    const modalWarningMany = useSelector(state =>  state.ModalReducers.modalWarningMany)
+    const modalOpened = useSelector( state =>state.ModalReducers.modalOpened)
+    const modalFinish = useSelector(state => state.ModalReducers.modalFinish)
 
 
 
-    const modalProps = value => setCourseUSD(value);
+
 
 
     return (
         <div className="App">
-          <Header modalProps={modalProps}
-                  setManyBasket ={setManyBasket}
-                  setModalWarning={ setModalWarning}
-                  manyBasket={manyBasket}
-          />
-          <Main
-              course={courseUSD}
-              setModalOpened={setModalOpened}
-              manyBasket={manyBasket}
-              setModalMany={setModalMany}
-              setDataModal={setDataModal}
+          <AxiosComponent/>
+          <Header/>
+          <Main/>
+          {modalFinish ? <ModalFinish/> : false}
 
-          />
-            {modalFinish ? <ModalFinish
-                dataModal={dataModal}
-                setModalFinish={setModalFinish}
+          {modalOpened ? <Modal/> : false}
 
-
-
-            /> : false}
-
-
-            {modalOpened ? <Modal
-                dataModal={dataModal}
-                setModalOpened={setModalOpened}
-                courseUSD={courseUSD}
-                manyBasket={manyBasket}
-                setManyBasket={setManyBasket}
-                setModalFinish={setModalFinish}
-            /> : false}
-
-          {modalWarning ? <ModalWarning
+          {modalWarningCurrency ? <ModalWarning
               value={"Выберете валюту!"}
-              setModalWarning={setModalWarning}
-              modalWarning={modalWarning}
-
-
           /> : false}
-            {modalMany ? <ModalWarning
-                value={"Пополните баланс!"}
-                setModalMany={setModalMany}
-                modalMany={modalMany}
+
+          {modalWarningMany ? <ModalWarning
+              value={"Пополните баланс!"}
             /> : false}
 
         </div>
     );
 }
 
-export default App;
+
+
+
+
+export default  App;

@@ -1,42 +1,55 @@
 import React from "react";
 import './Modal.sass'
 import ReactDOM from 'react-dom'
+import { useDispatch, useSelector} from 'react-redux'
 import mockProduct from "../Main/product/mockProduct";
+import {modalFinish, modalOpened} from "../redux/action/ModalAction";
+import {subtractionBasket} from "../redux/action/CurrencyAction";
 
-function Modal  (props)  {
-    const modalClose = () => {
-        props.setModalOpened(false)
-    }
+function Modal  ()  {
+    const modalDataInfo = useSelector(state => state.ModalReducers.modalData )
+    const usd = useSelector(state => state.AxiosReducer.usdMany)
 
-    const resultQuantity = () => {
-        mockProduct.map((el) => {
-            if(props.dataModal.number === el.number) {
+
+    const dispatch = useDispatch()
+    const productModalOpened = condition => dispatch(modalOpened(condition))
+    const subBasket = number => dispatch(subtractionBasket(number))
+    const modalEnd = condition => dispatch(modalFinish(condition))
+
+
+
+    const resultQuantity = (item) => {
+        mockProduct.forEach((el) => {
+            if( item.number === el.number) {
                 el.quantity = el.quantity - 1
             }
         })
     } //Работаем с количеством
 
-    const modalReceive = () => {
-        let many = props.dataModal.price * props.courseUSD
-        many = parseInt(many.toFixed(2))
-        let balance = props.manyBasket - many
-        props.setManyBasket(balance)
-        props.setModalOpened(false)
-        props.setModalFinish(true)
-        resultQuantity()
 
+    const modalClose = () => {
+        productModalOpened(false)
+    }
 
-
+    const modalCloseFinish = () => {
+        let out = 0;
+        out = modalDataInfo.price * usd
+        out = out.toFixed(2)
+        out = parseInt(out)
+        subBasket(out)
+        resultQuantity(modalDataInfo)
+        productModalOpened(false)
+        modalEnd(true)
     }
 
     return ReactDOM.createPortal(
         <div className="modal">
             <div className='modal-window confirmation'>
-                <img src={props.dataModal.img} alt="товар"/>
+                <img src={modalDataInfo.img} alt="товар"/>
                 <h2>Выбрать данный товар</h2>
-                <div className='confirmation-price'>{props.dataModal.price} $</div>
-                <button onClick={modalClose} className='modal-window__cancel'>Отмена</button>
-                <button onClick={modalReceive} className="modal-window__click">ОК</button>
+                <div className='confirmation-price'>{modalDataInfo.price} $</div>
+                <button  className='modal-window__cancel' onClick={modalClose}>Отмена</button>
+                <button  className="modal-window__click" onClick={modalCloseFinish}>ОК</button>
             </div>
         </div>,
         document.getElementById('modal')
@@ -46,13 +59,8 @@ function Modal  (props)  {
 
 }
 
+
+
 export default Modal;
 
 
-// <div className="modal">
-//     <div className='modal-window'>
-//         <img src="#" alt="Товар"/> // Подставить name
-//         <h2>Примите товар</h2>
-//         <button>Ок</button>
-//     </div>
-// </div>

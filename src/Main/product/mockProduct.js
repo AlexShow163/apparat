@@ -8,6 +8,7 @@ export default [
         price: 25,
         quantity: 25,
 
+
     },
     {
         number: 2,
@@ -66,7 +67,7 @@ export default [
 
     },
     {
-        number: 8,
+        number: 9,
         product: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/carrot-cake-8d8dfb5.jpg?quality=90&resize=960,872',
         name: 'cake',
         price: 40,
